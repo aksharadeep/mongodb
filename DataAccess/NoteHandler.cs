@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Entities;
+using MongoDB.Driver;
 
 namespace DataAccess
 {
@@ -13,36 +14,32 @@ namespace DataAccess
         {
             context = noteDbContext;
         }
-        //method to add a note into the table
-        public int AddNote(Note note)
+
+        public void AddNote(Note note)
         {
-            context.Notes.Add(note);
-            return context.SaveChanges();
+            context.notes.InsertOne(note);
         }
-        //method to get note by id
+
         public Note GetNoteById(int id)
         {
-            return context.Notes.Find(id);
+            return context.notes.Find(n => n.NoteId == id).FirstOrDefault();
         }
-        //method to get all notes
+
         public List<Note> GetNotes()
         {
-            return context.Notes.ToList();
-        }
-        //method to update the note
-        public int UpdateNote(Note note)
-        {
-            context.Entry<Note>(note).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
-            return context.SaveChanges();
-        }
-        //method to delete note by id
-        public int DeleteNote(int id)
-        {
-            var note = context.Notes.Find(id);
-            context.Notes.Remove(note);
-            return context.SaveChanges();
+            return context.notes.Find(_ => true).ToList();
         }
 
-
+        public bool UpdateNote(int id,Note note)
+        {
+            var filter = Builders<Note>.Filter.Where(n => n.NoteId == id);
+            var updatedResult = context.notes.ReplaceOne(filter, note);
+            return updatedResult.IsAcknowledged && updatedResult.ModifiedCount > 0;
+        }
+        public bool DeleteNote(int id)
+        {
+            var deleteResult = context.notes.DeleteOne(n => n.NoteId == id);
+            return deleteResult.IsAcknowledged && deleteResult.DeletedCount > 0;
+        }
     }
 }

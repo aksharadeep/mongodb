@@ -51,7 +51,8 @@ namespace KeepAPI.Controllers
         {
             try
             {
-                return Created("api/note", keepService.AddNote(note));
+                keepService.AddNote(note);
+                return Created("api/note",note);
             }
             catch (Exception e)
             {
@@ -61,11 +62,11 @@ namespace KeepAPI.Controllers
 
         // PUT api/values/5
         [HttpPut]
-        public IActionResult Put([FromBody] Note note)
+        public IActionResult Put(int id,[FromBody] Note note)
         {
             try
             {
-                return Ok(keepService.UpdateNote(note));
+                return Ok(keepService.UpdateNote(id,note));
             }
             catch (Exception e)
             {

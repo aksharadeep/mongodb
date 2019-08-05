@@ -1,17 +1,17 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using MongoDB.Bson.Serialization.Attributes;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Entities
 {
     public class Note
     {
-      //  [DatabaseGenerated(DatabaseGeneratedOption.None)]
+        [BsonId]
         public int NoteId { get; set; }
+        [BsonElement("title")]
         public string Title { get; set; }
+        [BsonElement("text")]
         public string Text { get; set; }
-        [JsonIgnore]
-        public virtual ICollection<Label> labels { get; set; }
+        [BsonIgnore]
+        public ICollection<Label> labels { get; set; }
     }
 }

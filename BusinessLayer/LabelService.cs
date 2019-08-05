@@ -16,12 +16,12 @@ namespace BusinessLayer
             labelHandler = handler;
         }
         //method to add a label and throw appropriate exception if any
-        public int AddLabel(Label label)
+        public void AddLabel(Label label)
         {
             var _label = labelHandler.GetLabelById(label.LabelId);
             if (_label == null)
             {
-                return labelHandler.AddLabel(label);
+                 labelHandler.AddLabel(label);
             }
             else
             {
@@ -49,7 +49,7 @@ namespace BusinessLayer
             return labelHandler.GetLabels();
         }
         //method to delete a label by id
-        public int DeleteLabel(int id)
+        public bool DeleteLabel(int id)
         {
             var label = labelHandler.GetLabelById(id);
             if (label == null)
@@ -63,7 +63,7 @@ namespace BusinessLayer
 
         }
         //method to update a label
-        public int UpdateLabel(Label label)
+        public bool UpdateLabel(int id,Label label)
         {
             var _label = labelHandler.GetLabelById(label.LabelId);
             if (_label == null)
@@ -73,7 +73,7 @@ namespace BusinessLayer
             else
             {
                 _label.Description = label.Description;
-                return labelHandler.UpdateLabel(_label);
+                return labelHandler.UpdateLabel(id,_label);
             }
         }
     }

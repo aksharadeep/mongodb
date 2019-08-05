@@ -9,8 +9,8 @@ namespace BusinessLayer
     {
         Label GetLabelById(int id);
         List<Label> GetLabels();
-        int AddLabel(Label label);
-        int UpdateLabel(Label label);
-        int DeleteLabel(int id);
+        void AddLabel(Label label);
+        bool UpdateLabel(int id,Label label);
+        bool DeleteLabel(int id);
     }
 }

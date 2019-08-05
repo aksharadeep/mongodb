@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Entities;
+using MongoDB.Driver;
 
 namespace DataAccess
 {
@@ -13,35 +14,32 @@ namespace DataAccess
         {
             context = noteDbContext;
         }
-        //method to add a label into the table
-        public int AddLabel(Label label)
+
+        public void AddLabel(Label label)
         {
-            context.Labels.Add(label);
-            return context.SaveChanges();
-        }
-        //method to get all labels
-        public List<Label> GetLabels()
-        {
-            return context.Labels.ToList();
-        }
-        //method to get label by id
-        public Label GetLabelById(int id)
-        {
-            return context.Labels.Find(id);
-        }
-        //method to update the label
-        public int UpdateLabel(Label label)
-        {
-            context.Entry<Label>(label).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
-            return context.SaveChanges();
-        }
-        //method to delete a label by id
-        public int DeleteLabel(int id)
-        {
-            var label = context.Labels.Find(id);
-            context.Labels.Remove(label);
-            return context.SaveChanges();
+            context.labels.InsertOne(label);
         }
 
+        public Label GetLabelById(int id)
+        {
+            return context.labels.Find(l => l.LabelId == id).FirstOrDefault();
+        }
+
+        public List<Label> GetLabels()
+        {
+            return context.labels.Find(_ => true).ToList();
+        }
+
+        public bool UpdateLabel(int id, Label label)
+        {
+            var filter = Builders<Label>.Filter.Where(l => l.LabelId == id);
+            var updatedResult = context.labels.ReplaceOne(filter, label);
+            return updatedResult.IsAcknowledged && updatedResult.ModifiedCount > 0;
+        }
+        public bool DeleteLabel(int id)
+        {
+            var deleteResult = context.labels.DeleteOne(l=> l.LabelId == id);
+            return deleteResult.IsAcknowledged && deleteResult.DeletedCount > 0;
+        }
     }
 }

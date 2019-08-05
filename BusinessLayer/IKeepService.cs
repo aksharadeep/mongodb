@@ -9,8 +9,8 @@ namespace BusinessLayer
     {
         Note GetNoteById(int id);
         List<Note> GetNotes();
-        int AddNote(Note note);
-        int UpdateNote(Note note);
-        int DeleteNote(int id);
+        void AddNote(Note note);
+        bool UpdateNote(int id ,Note note);
+        bool DeleteNote(int id);
     }
 }

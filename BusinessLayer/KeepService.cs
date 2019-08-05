@@ -16,12 +16,12 @@ namespace BusinessLayer
         }
 
         //method to add a note and throw respective exception
-        public int AddNote(Note note)
+        public void AddNote(Note note)
         {
             var keepNote = noteHandler.GetNoteById(note.NoteId);
             if (keepNote == null)
             {
-                return noteHandler.AddNote(note);
+                noteHandler.AddNote(note);
             }
             else
             {
@@ -48,7 +48,7 @@ namespace BusinessLayer
             return noteHandler.GetNotes();
         }
         //method to update the note
-        public int UpdateNote(Note note)
+        public bool UpdateNote(int id,Note note)
         {
             var keepNote = noteHandler.GetNoteById(note.NoteId);
             if (keepNote == null)
@@ -59,11 +59,11 @@ namespace BusinessLayer
             {
                 keepNote.Text = note.Text;
                 keepNote.Title = note.Title;
-                return noteHandler.UpdateNote(keepNote);
+                return noteHandler.UpdateNote(id,keepNote);
             }
         }
         //method to delete a note by id
-        public int DeleteNote(int id)
+        public bool DeleteNote(int id)
         {
             var keepNote = noteHandler.GetNoteById(id);
             if (keepNote == null)

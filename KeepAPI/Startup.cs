@@ -28,8 +28,6 @@ namespace KeepAPI
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            var constr = Configuration.GetConnectionString("keepdb");
-            services.AddDbContext<NoteDbContext>(option => option.UseSqlServer(constr));
             services.AddScoped<NoteDbContext>();
 
             services.AddScoped<INoteHandler, NoteHandler>();

@@ -45,7 +45,8 @@ namespace KeepAPI.Controllers
         {
             try
             {
-                return Ok(labelService.AddLabel(label));
+                labelService.AddLabel(label);
+                return Ok(label);
             }
             catch (Exception e)
             {
@@ -56,11 +57,11 @@ namespace KeepAPI.Controllers
 
         // PUT: api/Label/5
         [HttpPut]
-        public IActionResult Put([FromBody] Label label)
+        public IActionResult Put(int id,[FromBody] Label label)
         {
             try
             {
-                return Ok(labelService.UpdateLabel(label));
+                return Ok(labelService.UpdateLabel(id,label));
             }
             catch (Exception e)
             {
