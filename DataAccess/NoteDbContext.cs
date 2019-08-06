@@ -19,6 +19,6 @@ namespace DataAccess
         }
 
         public IMongoCollection<Note> notes => database.GetCollection<Note>("Notes");
-        public IMongoCollection<Label> labels => database.GetCollection<Label>("Labels");
+      //  public IMongoCollection<Label> labels => database.GetCollection<Label>("Labels");
     }
 }

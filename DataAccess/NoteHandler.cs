@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Entities;
+using MongoDB.Bson;
 using MongoDB.Driver;
 
 namespace DataAccess
@@ -14,7 +15,7 @@ namespace DataAccess
         }
 
         public void AddNote(Note note)
-        {
+        { 
             context.notes.InsertOne(note);
         }
 
@@ -38,6 +39,50 @@ namespace DataAccess
         {
             var deleteResult = context.notes.DeleteOne(n => n.NoteId == id);
             return deleteResult.IsAcknowledged && deleteResult.DeletedCount > 0;
+        }
+
+        public void AddLabel(int noteId,Label label)
+        {
+            int LabelId = GetNewId(noteId);
+            label.LabelId = LabelId;
+            var filter = Builders<Note>.Filter.Eq(n => n.NoteId, noteId);
+            var update = Builders<Note>.Update.Push(e => e.labels, label);
+            context.notes.FindOneAndUpdate(filter, update);
+        }
+        public int GetNewId(int noteId)
+        {
+            return context.notes.AsQueryable().Where(n => n.NoteId == noteId).FirstOrDefault().labels.Max(l => l.LabelId)+1;
+        }
+         public void UpdateLabel(int noteId,Label label)
+         {
+           Note noteToUpdate =  context.notes.Find(n => n.NoteId == noteId).FirstOrDefault();
+           Label _label=  noteToUpdate.labels.FirstOrDefault(l => l.LabelId == label.LabelId);
+            _label.Description = label.Description;
+            context.notes.ReplaceOne(n => n.NoteId == noteToUpdate.NoteId, noteToUpdate);
+         }
+
+        public ICollection<Label> GetLabels(int noteId)
+        {
+            Note noteToGet = context.notes.Find(n => n.NoteId == noteId).FirstOrDefault();
+            return noteToGet.labels;
+
+        }
+
+        public void DeleteLabelByNoteIdAndLabelId(int noteId, int labelId)
+        {
+            Note noteToGet = context.notes.Find(n => n.NoteId == noteId).FirstOrDefault();
+            Label label = noteToGet.labels.FirstOrDefault(l => l.LabelId == labelId);
+
+            var filter = Builders<Note>.Filter.Eq(n => n.NoteId, noteId);
+            var update = Builders<Note>.Update.Pull(e => e.labels, label);
+            context.notes.FindOneAndUpdate(filter, update);
+        }
+
+        public Label GetLabelById(int noteId,int labelId)
+        {
+            Note noteToGet = context.notes.Find(n => n.NoteId == noteId).FirstOrDefault();
+            Label label = noteToGet.labels.First(l => l.LabelId == labelId);
+            return label;
         }
     }
 }

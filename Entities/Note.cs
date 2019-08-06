@@ -5,6 +5,12 @@ namespace Entities
 {
     public class Note
     {
+
+        public Note()
+        {
+            labels = new List<Label>();
+        }
+
         [BsonId]
         public int NoteId { get; set; }
         [BsonElement("title")]

@@ -21,6 +21,10 @@ namespace BusinessLayer
             var keepNote = noteHandler.GetNoteById(note.NoteId);
             if (keepNote == null)
             {
+                if (note.labels.Count==0)
+                {
+                    note.labels = null;
+                }
                 noteHandler.AddNote(note);
             }
             else
@@ -74,6 +78,32 @@ namespace BusinessLayer
             {
                 return noteHandler.DeleteNote(id);
             }
+        }
+
+        public void AddLabel(int noteId, Label label)
+        {
+            noteHandler.AddLabel(noteId, label);
+        }
+        public void UpdateLabel(int noteId, Label label)
+        {
+            var _label = noteHandler.GetLabelById(noteId, label.LabelId);
+            if (_label == null)
+            {
+                throw new LabelNotFoundException($"label with id {label.LabelId} not found");
+            }
+            else
+            {
+                noteHandler.UpdateLabel(noteId, label);
+            }
+           
+        }
+        public  ICollection<Label> GetLabels(int noteId)
+        {
+          return  noteHandler.GetLabels(noteId);
+        }
+        public void DeleteLabelByNoteIdAndLabelId(int noteId, int labelId)
+        {
+            noteHandler.DeleteLabelByNoteIdAndLabelId(noteId, labelId);
         }
     }
 }

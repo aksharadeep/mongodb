@@ -11,7 +11,5 @@ namespace Entities
         public int LabelId { get; set; }
         [BsonElement("description")]
         public string Description { get; set; }
-        [BsonElement("noteid")]
-        public int NoteId { get; set; }
     }
 }

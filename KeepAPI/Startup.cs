@@ -33,9 +33,6 @@ namespace KeepAPI
             services.AddScoped<INoteHandler, NoteHandler>();
             services.AddScoped<IKeepService, KeepService>();
 
-            services.AddScoped<ILabelHandler, LabelHandler>();
-            services.AddScoped<ILabelService, LabelService>();
-
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
 

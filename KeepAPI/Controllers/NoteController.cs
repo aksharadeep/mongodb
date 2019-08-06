@@ -52,7 +52,7 @@ namespace KeepAPI.Controllers
             try
             {
                 keepService.AddNote(note);
-                return Created("api/note",note);
+                return Created("api/note", note);
             }
             catch (Exception e)
             {
@@ -62,11 +62,11 @@ namespace KeepAPI.Controllers
 
         // PUT api/values/5
         [HttpPut]
-        public IActionResult Put(int id,[FromBody] Note note)
+        public IActionResult Put(int id, [FromBody] Note note)
         {
             try
             {
-                return Ok(keepService.UpdateNote(id,note));
+                return Ok(keepService.UpdateNote(id, note));
             }
             catch (Exception e)
             {
@@ -81,6 +81,60 @@ namespace KeepAPI.Controllers
             try
             {
                 return Ok(keepService.DeleteNote(id));
+            }
+            catch (Exception e)
+            {
+                return NotFound(e.Message);
+            }
+        }
+
+        [HttpGet("{id}/label")]
+        public IActionResult GetLabelsById(int id)
+        {
+            try
+            {
+                return Ok(keepService.GetLabels(id));
+            }
+            catch (Exception e)
+            {
+                return NotFound(e.Message);
+            }
+        }
+
+        [HttpPost("{id}")]
+        public IActionResult Post(int id, [FromBody] Label label)
+        {
+            try
+            {
+                keepService.AddLabel(id, label);
+                return Created("api/note", label);
+            }
+            catch (Exception e)
+            {
+                return NotFound(e.Message);
+            }
+        }
+
+        [HttpPut("{id}")]
+        public IActionResult Put(int id, [FromBody] Label label)
+        {
+            try
+            {
+                keepService.UpdateLabel(id, label);
+                return Ok();
+            }
+            catch (Exception e)
+            {
+                return NotFound(e.Message);
+            }
+        }
+        [HttpDelete("{nid}/label/{lid}")]
+        public IActionResult Delete(int nid, int lid)
+        {
+            try
+            {
+                keepService.DeleteLabelByNoteIdAndLabelId(nid, lid);
+                return Ok();
             }
             catch (Exception e)
             {
