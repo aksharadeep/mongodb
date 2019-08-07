@@ -21,9 +21,9 @@ namespace BusinessLayer
             var keepNote = noteHandler.GetNoteById(note.NoteId);
             if (keepNote == null)
             {
-                if (note.labels.Count==0)
+                if (note.labels.Count == 0)
                 {
-                    note.labels = null;
+                    note.labels = new List<Label>();
                 }
                 noteHandler.AddNote(note);
             }
@@ -86,16 +86,7 @@ namespace BusinessLayer
         }
         public void UpdateLabel(int noteId, Label label)
         {
-            var _label = noteHandler.GetLabelById(noteId, label.LabelId);
-            if (_label == null)
-            {
-                throw new LabelNotFoundException($"label with id {label.LabelId} not found");
-            }
-            else
-            {
-                noteHandler.UpdateLabel(noteId, label);
-            }
-           
+            noteHandler.UpdateLabel(noteId, label);
         }
         public  ICollection<Label> GetLabels(int noteId)
         {

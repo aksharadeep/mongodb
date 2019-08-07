@@ -17,7 +17,7 @@ namespace Entities
         public string Title { get; set; }
         [BsonElement("text")]
         public string Text { get; set; }
-        [BsonIgnore]
+        [BsonElement("labelgroups")]
         public ICollection<Label> labels { get; set; }
     }
 }
